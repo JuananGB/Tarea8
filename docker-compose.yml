@@ -1,0 +1,29 @@
+services:
+
+  wordpress: # servicio wordpress
+    image: wordpress # imagen más reciente de wordpress
+    restart: always # se reinicie siempre
+    ports:
+      - 8080:80 # puerto anfritión=8080;puerto host=80
+    environment: # variables de entorno
+      WORDPRESS_DB_HOST: db # host de la BBDD
+      WORDPRESS_DB_USER: wordpress_user # Usuario para acceder a la BBDD
+      WORDPRESS_DB_PASSWORD: wordpress_password # Contraseña para acceder a la BBDD
+      WORDPRESS_DB_NAME: wordpress # Nombre de la BBDD
+    volumes: # Volumen donde se mapeara el contenido del servicio wordpress
+      - wordpress_data:/var/www/html  # La carpeta html/ se mapeara en el enlace wordpress
+
+  db: # servicio db
+    image: mysql:8.0 # Versión 8.0 de la imagen de mysql
+    restart: always # Que se reinicie siempre
+    environment: # Variables de entorno
+      MYSQL_DATABASE: wordpress  
+      MYSQL_USER: wordpress_user  # Usuario
+      MYSQL_PASSWORD: wordpress_password # Contraseña
+      MYSQL_RANDOM_ROOT_PASSWORD: '1' # Se genera una contraseña aleatorio (no la indicamos nosotros)
+    volumes:
+      - db_data:/var/lib/mysql  # contenido de la carpeta mysql/ se mapeara en el enlace db
+
+volumes:  # Volumes de los servicios
+  wordpress_data:
+  db_data:
